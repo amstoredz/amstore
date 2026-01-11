@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup amstore database
+
+[Service]
+Type=oneshot
+WorkingDirectory=/path/to/your/amstore
+EnvironmentFile=/path/to/your/amstore/.env
+ExecStart=/usr/bin/node /path/to/your/amstore/scripts/backup.js
+User=www-data
