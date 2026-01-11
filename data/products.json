@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1700000000001,
+    "name": "ساعة رولكس دايتونا (نسخة طبق الأصل)",
+    "price": "45000",
+    "color": "فضية",
+    "image": "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    "description": "ساعة فاخرة بتصميم رياضي أنيق، مقاومة للماء والصدأ."
+  },
+  {
+    "id": 1700000000002,
+    "name": "ساعة كاسيو فينتاج",
+    "price": "5500",
+    "color": "ذهبية",
+    "image": "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+    "description": "تصميم كلاسيكي يعود للثمانينات، مناسبة للجنسين."
+  }
+]

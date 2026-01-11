@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM Store - متجر الساعات الفاخرة</title>
+    <meta property="og:title" content="AM Store - الفخامة بين يديك">
+    <meta property="og:description" content="تسوق أفضل الساعات الفاخرة بأسعار تنافسية. توصيل لجميع ولايات الجزائر.">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3109/3109852.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .hidden-modal { display: none; }
+        .modal-active { display: flex; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 glass-effect">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="text-3xl font-black text-blue-900 flex items-center gap-2 tracking-tighter">
+                <span class="text-4xl">⌚</span> AM Store
+            </div>
+            <div>
+                <button id="admin-btn" class="hidden text-sm bg-red-500 text-white px-3 py-1 rounded">لوحة التحكم</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-blue-900 text-white py-12 text-center">
+        <h1 class="text-4xl font-bold mb-2">أفخم الساعات بين يديك</h1>
+        <p class="text-lg opacity-90">تصفح مجموعتنا المميزة واطلب الآن</p>
+    </header>
+
+    <!-- Admin Panel (Hidden by default, shown after login) -->
+    <div id="admin-panel" class="hidden container mx-auto px-4 py-6 bg-red-50 border-b-2 border-red-200 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-red-700">⚙️ إدارة المنتجات</h2>
+            <button id="logout-btn" class="bg-gray-800 text-white px-4 py-1 rounded hover:bg-gray-900 text-sm">تسجيل خروج 🔒</button>
+        </div>
+        <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" id="p-name" placeholder="اسم المنتج" class="p-2 border rounded" required>
+            <input type="number" id="p-price" placeholder="السعر (د.ج)" class="p-2 border rounded" required>
+            <input type="text" id="p-color" placeholder="اللون" class="p-2 border rounded">
+            <input type="url" id="p-image" placeholder="رابط الصورة" class="p-2 border rounded">
+            <textarea id="p-desc" placeholder="وصف المنتج" class="p-2 border rounded col-span-1 md:col-span-2"></textarea>
+            <button type="submit" class="bg-green-600 text-white py-2 rounded font-bold col-span-1 md:col-span-2 hover:bg-green-700">إضافة منتج</button>
+        </form>
+    </div>
+
+    <!-- Products Grid -->
+    <main class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">منتجاتنا الحصرية</h2>
+        <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Products will be injected here -->
+            <div class="col-span-full text-center py-10 text-gray-500">جاري تحميل المنتجات...</div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 text-center mt-12">
+        <p id="copyright-trigger" class="cursor-pointer select-none">© 2026 AM Store. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- Product Details Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden justify-center items-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg overflow-hidden relative max-h-[90vh] overflow-y-auto">
+            <button id="close-modal" class="absolute top-2 left-2 text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+            
+            <!-- Details View -->
+            <div id="modal-details" class="p-6">
+                <img id="m-image" src="" alt="Product" class="w-full h-64 object-contain mb-4 rounded bg-gray-100">
+                <h3 id="m-name" class="text-2xl font-bold text-gray-900 mb-2"></h3>
+                <p id="m-desc" class="text-gray-600 mb-4 text-sm"></p>
+                <div class="flex justify-between items-center mb-6">
+                    <span id="m-price" class="text-xl font-bold text-blue-600"></span>
+                    <span id="m-color" class="bg-gray-200 px-3 py-1 rounded text-sm text-gray-700"></span>
+                </div>
+                <div id="m-color-container" class="mb-6">
+                    <h4 class="text-sm font-bold text-gray-600 mb-2">الألوان المتاحة:</h4>
+                    <div id="m-colors" class="flex flex-wrap gap-2">
+                        <!-- Color buttons will be injected here -->
+                    </div>
+                </div>
+                <button id="buy-now-btn" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">إتمام الطلب</button>
+            </div>
+
+            <!-- Order Form View (Initially Hidden) -->
+            <div id="modal-order" class="hidden p-6 bg-gray-50">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">بيانات التوصيل</h3>
+                <form id="order-form" class="space-y-3">
+                    <input type="text" id="c-name" placeholder="الاسم الكامل" class="w-full p-2 border rounded" required>
+                    <input type="tel" id="c-phone" placeholder="رقم الهاتف" class="w-full p-2 border rounded" required>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <select id="c-state" class="w-full p-2 border rounded" required>
+                            <option value="">اختر الولاية</option>
+                            <!-- States injected via JS -->
+                        </select>
+                        <input type="text" id="c-muni" placeholder="البلدية" class="w-full p-2 border rounded" required>
+                    </div>
+
+                    <div class="bg-white p-3 rounded border mt-4">
+                        <div class="flex justify-between text-sm text-gray-600">
+                            <span>سعر المنتج:</span>
+                            <span id="summary-price"></span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-600 mt-1">
+                            <span>سعر التوصيل:</span>
+                            <span id="summary-delivery">500 د.ج</span>
+                        </div>
+                        <div class="flex justify-between font-bold text-lg text-blue-900 mt-2 border-t pt-2">
+                            <span>الإجمالي:</span>
+                            <span id="summary-total"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition mt-4">تأكيد الطلب</button>
+                    <button type="button" id="back-to-details" class="w-full text-gray-500 py-2 text-sm hover:underline">رجوع</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-80 z-[60] hidden justify-center items-center p-4">
+        <div class="bg-white rounded-lg p-6 w-full max-w-sm">
+            <h3 class="text-lg font-bold mb-4 text-center">دخول المسؤول</h3>
+            <input type="password" id="admin-password" placeholder="كلمة المرور" class="w-full p-2 border rounded mb-4">
+            <button id="login-btn" class="w-full bg-red-600 text-white py-2 rounded">دخول</button>
+            <button id="close-login" class="w-full mt-2 text-gray-500">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg hidden transition-opacity duration-300">
+        تمت العملية بنجاح
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
